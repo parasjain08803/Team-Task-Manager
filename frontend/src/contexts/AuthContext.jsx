@@ -17,26 +17,35 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('AuthContext: Initializing auth state');
     const token = localStorage.getItem('token');
+    console.log('AuthContext: Token found:', !!token);
+    
     if (token) {
+      // Add timeout to prevent infinite loading
+      const timeout = setTimeout(() => {
+        console.log('AuthContext: Loading timeout, setting loading to false');
+        setLoading(false);
+      }, 5000);
+      
       authAPI.getCurrentUser()
         .then(response => {
+          console.log('AuthContext: Successfully got current user');
           setUser(response.data);
         })
         .catch((error) => {
-
+          console.error('Failed to get current user:', error);
           if (error.response?.status === 401 || error.response?.status === 403) {
             localStorage.removeItem('token');
-            setUser(null);
-          } else {
-
-            setUser(null);
           }
+          setUser(null);
         })
         .finally(() => {
+          clearTimeout(timeout);
           setLoading(false);
         });
     } else {
+      console.log('AuthContext: No token, setting loading to false');
       setLoading(false);
     }
   }, []);
