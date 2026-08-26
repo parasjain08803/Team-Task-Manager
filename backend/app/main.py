@@ -16,7 +16,7 @@ async def startup_event():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://team-task-manager-six-sigma.vercel.app/"],
+    allow_origins=["https://team-task-manager-six-sigma.vercel.app"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
